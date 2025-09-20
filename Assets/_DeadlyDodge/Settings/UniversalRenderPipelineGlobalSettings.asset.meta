@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 18dc0cd2c080841dea60987a38ce93fa
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289616
+  packageName: Level up your code with design patterns and SOLID
+  packageVersion: 
+  assetPath: Assets/Settings/UniversalRenderPipelineGlobalSettings.asset
+  uploadId: 0

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 99c9720ab356a0642a771bea13969a05
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289616
+  packageName: Level up your code with design patterns and SOLID
+  packageVersion: 1.1
+  assetPath: Assets/Scenes/SampleScene.unity
+  uploadId: 678909

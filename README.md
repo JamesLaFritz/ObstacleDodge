@@ -14,98 +14,136 @@
 * Dodge moving hazards and traps.
 * Survive as long as possible while racking up score multipliers.
 
-**Elevator Pitch:**
-*"Play as Dart, the quick-footed trickster, weaving through shifting mazes packed with relentless hazards. Blink, and you’re toast—hesitate, and you’re crushed. Speed and wit keep you alive in this fast-paced arcade dodge-fest!"*
+**Win / Lose Conditions:**
+
+* **Win:** Survive as long as possible; score accumulates from survival time and near-miss multipliers.
+* **Lose:** Collide with a hazard. Game ends and score summary is shown.
 
 ---
 
-## 2. Character
+## 2. Character – **Dart**
 
-**Name:** Dart
 **Tagline:** “Quick on his feet, quicker with his wit.”
+
 **Bio:** Dart isn’t the strongest, but in a world of shifting mazes and relentless hazards, speed and timing are everything. With lightning reflexes and an instinct for slipping past danger, Dart survives where others collide.
 
-**Visual Style:**
+**Final Visual Design:**
 
-* Bright, glowing neon silhouette (contrasts against darker hazard arenas).
-* Expressive animations: darting, dodging, quick turns.
-* Feels like a living spark of energy within a digital maze.
+* Sleek neon silhouette hero (Tron-inspired).
+* Colors: Cyan body glow, yellow eyes/highlights.
+* Effects: Light trails, pulse when dodging.
+* Animations: Idle, Run, Dodge, Hit/Death.
 
 ---
 
 ## 3. Gameplay
 
-### Core Mechanics
+* **Movement:** Simple 4-way (keyboard/controller, swipe/tilt mobile).
+* **Hazards:** Spikes, rolling boulders, moving blocks, laser grids.
+* **Maze Shifts:** Layout reconfigures dynamically.
+* **Scoring:** Survival time + near-miss multipliers.
 
-* **Movement:** Simple 4-direction (keyboard, controller, swipe/tilt on mobile).
-* **Hazards:**
+**Difficulty Curve Example (first 60s):**
 
-  * Moving blocks.
-  * Rolling boulders.
-  * Laser grids.
-  * Spikes that rise/fall.
-* **Maze Shifts:** Layout reconfigures every few seconds (dynamic challenge).
-* **Scoring:** Survive longer → higher multiplier. Extra points for near misses.
-
-### Win/Lose Conditions
-
-* **Win:** Survive longest or complete maze section.
-* **Lose:** Collide with hazard or run out of time (in timed modes).
-
-### Progression
-
-* Increasing speed and density of hazards.
-* Procedurally generated maze shifts (noise-based randomization).
-* Unlockable skins/power-ups for Dart.
+* 0–30s → Slow hazards, sparse maze shifts.
+* 30–60s → Faster hazards, denser shifts, tighter corridors.
 
 ---
 
-## 4. Art & Style
+## 4. Controls
 
-**Final Visual Identity:**
-
-* **Title:** *Dart: Deadly Dodge*
-* **Logo:** Yellow neon **DEADLY DODGE**, cyan accents, Tron-style shards and sparks.
-* **Background:** Dark navy with glowing cyan wireframe grid.
-* **Mood:** Retro-futuristic arcade (80s Tron + modern neon).
-
-**In-Game:**
-
-* Hazards glow in red/orange neon.
-* Maze walls are deep blue with cyan glow edges.
-* HUD elements styled in neon cyan/yellow for clarity.
+* **PC:** Arrow keys / WASD = Move, Space = Dodge.
+* **Controller:** Left Stick = Move, A (or Cross) = Dodge.
+* **Mobile:** Swipe = Move, Tap = Dodge.
 
 ---
 
-## 5. Audio
+## 5. UI Flow
 
-* **Sound Effects:** Neon zaps, swooshes, impact sparks.
-* **Music:** High-energy synthwave soundtrack that speeds up with game difficulty.
-* **VO/Callouts:** Arcade-style announcer: “DEADLY DODGE!”, “MAZE SHIFT!”, “NEAR MISS!”
-
----
-
-## 6. Technical
-
-* **Engine:** Unity 6 (URP for neon visuals).
-* **Frameworks:** Unity6CoreFramework (randomization, settings, editor tools).
-* **Randomization:** Noise-based procedural generation (maze patterns, hazard timings).
-* **Performance Target:** 60 FPS on mobile, 120 FPS+ on PC.
+* **Title Screen** → Start Game / Options / Exit.
+* **Game Screen** → Score, Timer, Multiplier, Callouts.
+* **Game Over Screen** → Score summary + Restart / Back to Title.
 
 ---
 
-## 7. Monetization (optional)
+## 6. Art & Assets
 
-* Free with ads (mobile).
-* Cosmetic skins for Dart.
-* Endless mode unlocks.
+### 🎮 Core Character
+
+* [x] **Dart model** – sleek neon silhouette.
+* [ ] Alternate skins (color swaps, glow variations).
+* [ ] Emissive neon materials with bloom.
+* [x] Animation set: idle, run, dodge, hit, death.
+
+### 🧱 Environment (Maze Tileset)
+
+* [ ] Floor tiles (neon glow edges).
+* [ ] Wall tiles (straight, corner, T-junction, cross).
+* [ ] Animated gates/doors (optional).
+* [ ] Hazard markers (warning panels, floor lights).
+
+### ⚠️ Hazards
+
+* [ ] **Spikes** (animated up/down).
+* [ ] **Rolling boulders** (glowing spheres).
+* [ ] **Laser beams** (turrets + beam FX).
+* [ ] **Moving blocks** (sliding neon panels).
+* [ ] Explosion/shatter VFX for destroyed hazards (optional).
+
+### 💎 Pickups (Optional / Power-ups)
+
+* [ ] Energy orbs / neon shards (for score or health).
+* [ ] Power-ups:
+
+  * [ ] Shield (short invulnerability).
+  * [ ] Dash (speed burst).
+  * [ ] Slow-Mo (hazards slow briefly).
+
+### 📊 UI / HUD
+
+* [ ] Title screen background (cyan/yellow neon grid). (Concept Done)
+* [ ] Score counter (yellow neon).
+* [ ] Multiplier display (cyan neon).
+* [ ] Timer (white neon).
+* [ ] Callouts: “DEADLY DODGE!”, “MAZE SHIFT!” (red/cyan neon bursts).
+* [ ] Menu overlays: Pause, Game Over, Restart.
+* [ ] Buttons styled with neon borders/glow.
+
+### ✨ VFX
+
+* [ ] **Character Trails:** Yellow neon streaks when Dart moves.
+* [ ] **Dodge Flash:** Cyan shockwave pulse.
+* [ ] **Near Miss:** Quick screen shake + red HUD pulse.
+* [ ] **Pickups:** Sparkle burst + light flare.
+* [ ] **Hazard Impacts:** Sparks, shatter particles.
+
+### 🔊 Audio
+
+* **Music:** Fast-paced synthwave track that ramps intensity. Tempo increases with difficulty.
+* **SFX:**
+
+  * Dodge “whoosh”
+  * Hazard trigger (spikes snap, lasers zap, blocks crash)
+  * Pickup collect (chime/glow)
+  * Game Over (descending synth)
+* **VO Callouts:** Arcade announcer for “DEADLY DODGE!” / “MAZE SHIFT!”
+
+---
+
+## 7. Technical
+
+* **Engine:** Unity 6 (URP, Bloom).
+* **Frameworks:** Unity6CoreFramework (randomization, settings).
+* **Procedural:** Maze + hazard layouts use noise functions (SquirrelNoise64Bit, HashBasedNoiseUtils).
+* **Performance:** 60 FPS mobile, 120+ FPS PC.
+* **Art Pipeline:** Models created with Meshy AI → imported into Unity → refined with URP emissive neon materials.
 
 ---
 
 ## 8. Future Expansions
 
-* **Multiplayer:** Competitive (last Dart standing).
-* **Boss Mazes:** Large-scale hazards with unique dodge patterns.
-* **Themed Arenas:** Ice grid, lava grid, space station.
+* Multiplayer: competitive dodge arenas.
+* Boss Hazards: large rolling crushers, sweeping laser walls.
+* Themed Arenas: Ice Grid, Lava Grid, Corrupted Grid.
 
 ---
