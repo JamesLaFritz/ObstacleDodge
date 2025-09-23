@@ -50,6 +50,8 @@ namespace DeadlyDodge.Gameplay
         /// Current world-space velocity (y used for gravity).
         /// </summary>
         private Vector3 _velocity = Vector3.zero;
+        
+        private Vector3 _moveVelocity = Vector3.zero;
 
         /// <summary>
         /// Cached CharacterController reference.
@@ -69,8 +71,6 @@ namespace DeadlyDodge.Gameplay
         {
             _cc = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
-            // TODO:
-            // if (_cameraTransform == null && Camera.main != null) _cameraTransform = Camera.main.transform;
         }
 
         /// <summary>
@@ -78,10 +78,6 @@ namespace DeadlyDodge.Gameplay
         /// </summary>
         private void Update()
         {
-            // TODO:
-            // 1) Compute camera-relative forward/right (XZ only).
-            // 6) Optionally rotate to face movement direction.
-            
             // Build the desired direction from _moveInput.
             var desiredHorizontal = _moveInput.x * transform.right;
             var desiredVertical = _moveInput.y * transform.forward;
@@ -93,7 +89,13 @@ namespace DeadlyDodge.Gameplay
             _velocity.y += _gravity * Time.deltaTime;
             
             // Move via _cc.Move().
-            _cc.Move((desiredMovement + _velocity) * Time.deltaTime);
+            _moveVelocity = desiredMovement + _velocity;
+        }
+
+        private void FixedUpdate()
+        {
+            // Move via _cc.Move().
+            _cc.Move(_moveVelocity * Time.deltaTime);
         }
 
         #endregion
