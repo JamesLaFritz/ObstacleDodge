@@ -9463,6 +9463,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3538345930392271752, guid: b52c507a36abc2541936228f481f7fed, type: 3}
   m_PrefabInstance: {fileID: 8922594839669992490}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &738539794 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4059262102235783520, guid: b52c507a36abc2541936228f481f7fed, type: 3}
+  m_PrefabInstance: {fileID: 8922594839669992490}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4192f9caebb742afa9dfb3c52202f839, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeadlyDodge.Hazards.FlyAtPlayer
 --- !u!1001 &742483458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25935,7 +25946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6948231157246855598, guid: d1e037a168551b04e815388618a7e6b6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.41
+      value: -23.78
       objectReference: {fileID: 0}
     - target: {fileID: 6948231157246855598, guid: d1e037a168551b04e815388618a7e6b6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -25966,9 +25977,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8027159171271440011, guid: d1e037a168551b04e815388618a7e6b6, type: 3}
+      propertyPath: _projectiles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8027159171271440011, guid: d1e037a168551b04e815388618a7e6b6, type: 3}
       propertyPath: '_flyAtTarget.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8027159171271440011, guid: d1e037a168551b04e815388618a7e6b6, type: 3}
+      propertyPath: '_projectiles.Array.data[0]'
+      value: 
+      objectReference: {fileID: 738539794}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26049,7 +26068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3538345930392271752, guid: b52c507a36abc2541936228f481f7fed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 6.6
       objectReference: {fileID: 0}
     - target: {fileID: 3538345930392271752, guid: b52c507a36abc2541936228f481f7fed, type: 3}
       propertyPath: m_LocalPosition.z
