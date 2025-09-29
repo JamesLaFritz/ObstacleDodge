@@ -1,62 +1,44 @@
 #region Header
 // GameManager.cs
 // Author: James LaFritz
-// Description: High-level state flow for the MVP (Title -> Controls -> Game -> GameOver).
+// Description: Wires countdown flow: start run, handle times-up, compute score, show summary.
 #endregion
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DeadlyDodge.Core
 {
     /// <summary>
-    /// Coordinates high-level game state transitions and scene routing.
+    /// Orchestrates the MVP flow with countdown loss and time-left scoring.
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
         #region Types
 
-        /// <summary>
-        /// Top-level states for the MVP game flow.
-        /// </summary>
-        public enum GameState
-        {
-            /// <summary>Title screen is shown.</summary>
-            Title,
-            /// <summary>Controls screen is shown.</summary>
-            Controls,
-            /// <summary>Active gameplay is running.</summary>
-            Playing,
-            /// <summary>Game over state is shown.</summary>
-            GameOver
-        }
+        /// <summary>High-level game states.</summary>
+        public enum GameState { Title, Controls, Playing, GameOver }
 
         #endregion
 
         #region Fields
 
-        /// <summary>
-        /// Current active game state.
-        /// </summary>
+        /// <summary>Current state.</summary>
         [SerializeField] private GameState _state = GameState.Title;
 
-        /// <summary>
-        /// Reference to the score system for resetting and summarizing runs.
-        /// </summary>
-        [SerializeField] private ScoreSystem _scoreSystem;
+        /// <summary>Run timer reference.</summary>
+        [SerializeField] private RunTimer _timer;
 
-        /// <summary>
-        /// Reference to the HUD controller for showing game over panels, etc.
-        /// </summary>
+        /// <summary>Score system reference.</summary>
+        [SerializeField] private ScoreSystem _score;
+
+        /// <summary>HUD controller for summary.</summary>
         [SerializeField] private UI.HUDController _hud;
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets the current active game state.
-        /// </summary>
+        /// <summary>Current state (read-only).</summary>
         public GameState State => _state;
 
         #endregion
@@ -64,22 +46,38 @@ namespace DeadlyDodge.Core
         #region Unity Messages
 
         /// <summary>
-        /// Caches references and initializes the title state.
+        /// Caches refs and subscribes to timer events.
         /// </summary>
         private void Awake()
         {
-            // TODO: Cache references if not assigned via Inspector.
-            // if (_scoreSystem == null) _scoreSystem = FindAnyObjectByType<ScoreSystem>();
-            // if (_hud == null) _hud = FindAnyObjectByType<UI.HUDController>();
+            if (_timer == null) _timer = FindAnyObjectByType<RunTimer>();
+            if (_score == null) _score = FindAnyObjectByType<ScoreSystem>();
+            if (_hud == null) _hud = FindAnyObjectByType<UI.HUDController>();
         }
 
         /// <summary>
-        /// Called on first frame to ensure we are at the Title flow entry.
+        /// Example entry point for a direct Game scene start in MVP.
         /// </summary>
         private void Start()
         {
-            // TODO: Load Title scene or show title overlay.
-            // GoTitle();
+            // In a multi-scene flow you'd call GoTitle(); for MVP start the run directly:
+            StartRun();
+        }
+
+        /// <summary>
+        /// Register for timer notifications once the object is active.
+        /// </summary>
+        private void OnEnable()
+        {
+            if (_timer != null) _timer.TimesUp += FailRun;
+        }
+
+        /// <summary>
+        /// Unsubscribe from timer notifications when disabled.
+        /// </summary>
+        private void OnDisable()
+        {
+            if (_timer != null) _timer.TimesUp -= FailRun;
         }
 
         #endregion
@@ -87,43 +85,41 @@ namespace DeadlyDodge.Core
         #region Public API
 
         /// <summary>
-        /// Enters the Title state and loads the Title scene.
+        /// Starts a new run: resets score and timer, enters Playing state.
         /// </summary>
-        public void GoTitle()
+        public void StartRun()
         {
-            // TODO: _state = GameState.Title; SceneManager.LoadScene("Title");
+            _state = GameState.Playing;
+            _score?.ResetRun();
+            _timer?.ResetTimer();
         }
 
         /// <summary>
-        /// Enters the Controls state and loads the Controls scene.
+        /// Call this when the player reaches the goal before the timer expires.
+        /// Computes score and shows summary (win).
         /// </summary>
-        public void GoControls()
+        public void CompleteLevel()
         {
-            // TODO: _state = GameState.Controls; SceneManager.LoadScene("Controls");
+            if (_state != GameState.Playing) return;
+            _state = GameState.GameOver;
+
+            var timeLeft = _timer != null ? _timer.RemainingSeconds : 0f;
+            _score?.ComputeFinalScore(timeLeft);
+            _hud?.ShowGameOver();
         }
 
         /// <summary>
-        /// Starts gameplay and loads the Game scene.
+        /// Ends the run due to collision loss or other reasons (if you want).
+        /// Not strictly needed since time-out is the primary loss in this design.
         /// </summary>
-        public void StartGame()
+        public void FailRun()
         {
-            // TODO:
-            // _state = GameState.Playing;
-            // _scoreSystem?.ResetAll();
-            // SceneManager.LoadScene("Game");
-        }
+            if (_state != GameState.Playing) return;
+            _state = GameState.GameOver;
 
-        /// <summary>
-        /// Ends the current run and shows the game over summary.
-        /// </summary>
-        public void GameOver()
-        {
-            // TODO:
-            // if (_state != GameState.Playing) return;
-            // _state = GameState.GameOver;
-            // _scoreSystem?.CommitBest();
-            // _hud?.ShowGameOver(_scoreSystem?.CurrentScore ?? 0, _scoreSystem?.BestScore ?? 0);
-            // Optionally load a "GameOver" scene instead of showing an overlay.
+            var timeLeft = _timer != null ? _timer.RemainingSeconds : 0f;
+            _score?.ComputeFinalScore(timeLeft);
+            _hud?.ShowGameOver();
         }
 
         #endregion

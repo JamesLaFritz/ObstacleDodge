@@ -48,7 +48,7 @@ namespace Prototype
         private void Update()
         {
             // Set the rotation axis and speed based on the axis values.
-            Vector3 axis = new Vector3(_xRotationAmount, _yRotationAmount, _zRotationAmount);
+            var axis = new Vector3(_xRotationAmount, _yRotationAmount, _zRotationAmount);
             // rotate the object
             transform.Rotate(axis * (_rotationSpeed * Time.deltaTime));
         }

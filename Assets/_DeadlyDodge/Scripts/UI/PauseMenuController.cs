@@ -4,6 +4,8 @@
 // Description: Handles pause toggling and menu navigation during gameplay.
 #endregion
 
+using System;
+using DeadlyDodge.Core;
 using UnityEngine;
 
 namespace DeadlyDodge.UI
@@ -23,21 +25,36 @@ namespace DeadlyDodge.UI
         /// <summary>
         /// Tracks whether the game is currently paused.
         /// </summary>
-        private bool _isPaused = false;
+        private bool _isPaused;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private GameManager _gameManager;
 
         #endregion
 
         #region Unity Messages
 
         /// <summary>
+        /// Caches references.
+        /// </summary>       
+        private void Awake()
+        {
+            _gameManager = FindFirstObjectByType<GameManager>();
+        }
+
+        /// <summary>
         /// Initializes the pause menu hidden.
         /// </summary>
         private void Start()
         {
-            // TODO:
-            // if (_pausePanel != null) _pausePanel.SetActive(false);
-            // _isPaused = false;
-            // Time.timeScale = 1f;
+            // Hide the pause panel.
+            if (_pausePanel != null) _pausePanel.SetActive(false);
+            // Set the initial state to not paused.
+            _isPaused = false;
+            // Set the time scale to 1 (unpaused).
+            Time.timeScale = 1;
         }
 
         #endregion
@@ -49,10 +66,13 @@ namespace DeadlyDodge.UI
         /// </summary>
         public void TogglePause()
         {
-            // TODO:
-            // _isPaused = !_isPaused;
-            // Time.timeScale = _isPaused ? 0f : 1f;
-            // if (_pausePanel != null) _pausePanel.SetActive(_isPaused);
+            // Toggle the pause state.
+            _isPaused = !_isPaused;
+            // Update the time scale.
+            Time.timeScale = _isPaused ? 0 : 1;
+            // Hide or Show based on the state
+            if (_pausePanel == null) return;
+            _pausePanel.SetActive(_isPaused);
         }
 
         /// <summary>

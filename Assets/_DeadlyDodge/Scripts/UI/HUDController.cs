@@ -1,68 +1,64 @@
 #region Header
 // HUDController.cs
 // Author: James LaFritz
-// Description: Updates score and timer UI, and shows a simple Game Over panel.
+// Description: Displays remaining time and final summary (time-left scoring plus no-hit bonus).
 #endregion
 
 using UnityEngine;
 using TMPro;
+using DeadlyDodge.Core;
 
 namespace DeadlyDodge.UI
 {
     /// <summary>
-    /// MVP HUD binding for score/time UI and a simple game-over summary.
+    /// Binds the countdown readout to text and shows a summary at game over.
     /// </summary>
     public sealed class HUDController : MonoBehaviour
     {
         #region Fields
 
-        /// <summary>
-        /// Text element displaying the current score.
-        /// </summary>
-        [SerializeField] private TMP_Text _scoreText;
-
-        /// <summary>
-        /// Text element displaying the elapsed time.
-        /// </summary>
+        /// <summary>Text element for the current remaining time.</summary>
         [SerializeField] private TMP_Text _timerText;
 
-        /// <summary>
-        /// Root panel for the game-over UI.
-        /// </summary>
+        /// <summary>Text element for the current hit count (optional).</summary>
+        [SerializeField] private TMP_Text _hitsText;
+
+        /// <summary>Root panel for Game Over summary.</summary>
         [SerializeField] private GameObject _gameOverPanel;
 
-        /// <summary>
-        /// Reference to the score system used for reading values.
-        /// </summary>
-        [SerializeField] private DeadlyDodge.Core.ScoreSystem _scoreSystem;
+        /// <summary>Summary text shown at Game Over (score, time left, hits).</summary>
+        [SerializeField] private TMP_Text _summaryText;
 
-        /// <summary>
-        /// Local timer display (optional; can read directly from ScoreSystem if desired).
-        /// </summary>
-        private float _elapsedForDisplay = 0f;
+        /// <summary>RunTimer reference.</summary>
+        [SerializeField] private RunTimer _timer;
+
+        /// <summary>ScoreSystem reference.</summary>
+        [SerializeField] private ScoreSystem _score;
 
         #endregion
 
         #region Unity Messages
 
         /// <summary>
-        /// Caches references if needed.
+        /// Caches references if not assigned.
         /// </summary>
         private void Awake()
         {
-            // TODO:
-            // if (_scoreSystem == null) _scoreSystem = FindAnyObjectByType<DeadlyDodge.Core.ScoreSystem>();
+            if (_timer == null) _timer = FindAnyObjectByType<RunTimer>();
+            if (_score == null) _score = FindAnyObjectByType<ScoreSystem>();
+            if (_gameOverPanel != null) _gameOverPanel.SetActive(false);
         }
 
         /// <summary>
-        /// Updates the timer and score readouts each frame.
+        /// Updates HUD readouts each frame.
         /// </summary>
         private void Update()
         {
-            // TODO:
-            // _elapsedForDisplay += Time.deltaTime;
-            // if (_timerText) _timerText.text = $"Time: {_elapsedForDisplay:F1}";
-            // if (_scoreText && _scoreSystem != null) _scoreText.text = $"Score: {_scoreSystem.CurrentScore}";
+            if (_timerText != null && _timer != null)
+                _timerText.text = $"Time: {_timer.RemainingSeconds:F1}";
+
+            if (_hitsText != null && _score != null)
+                _hitsText.text = $"Hits: {_score.HitCount}";
         }
 
         #endregion
@@ -70,17 +66,22 @@ namespace DeadlyDodge.UI
         #region Public API
 
         /// <summary>
-        /// Shows the game-over panel and writes summary text.
+        /// Shows a Game Over summary panel. Call from GameManager after ComputeFinalScore.
         /// </summary>
-        /// <param name="score">Final run score.</param>
-        /// <param name="bestScore">Session-best score.</param>
-        public void ShowGameOver(int score, int bestScore)
+        public void ShowGameOver()
         {
-            // TODO:
-            // if (_gameOverPanel == null) return;
-            // _gameOverPanel.SetActive(true);
-            // var text = _gameOverPanel.GetComponentInChildren<TMP_Text>();
-            // if (text != null) text.text = $"Score: {score}\nBest: {bestScore}";
+            if (_gameOverPanel == null || _summaryText == null || _timer == null || _score == null)
+            {
+                if (_gameOverPanel != null) _gameOverPanel.SetActive(true);
+                return;
+            }
+
+            _gameOverPanel.SetActive(true);
+            _summaryText.text =
+                $"Time Left: {_timer.RemainingSeconds:F1}\n" +
+                $"Hits: {_score.HitCount}\n" +
+                $"Score: {_score.FinalScore}\n" +
+                $"Best: {_score.BestScore}";
         }
 
         #endregion

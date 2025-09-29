@@ -69,11 +69,11 @@ namespace Prototype
         {
             var gamepad = Gamepad.current;
             var keyboard = Keyboard.current;
-            Vector3 move = Vector3.zero;
+            var move = Vector3.zero;
 
             if (gamepad != null)
             {
-                Vector2 stick = gamepad.leftStick.ReadValue();
+                var stick = gamepad.leftStick.ReadValue();
                 move.x = stick.x;
                 move.z = stick.y;
             }

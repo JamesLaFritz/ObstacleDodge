@@ -108,7 +108,7 @@ namespace Prototype
             if (!_targetPosition.HasValue) return true;
             if (_distanceToTarget < _distanceToTargetThreshold) return true;
             
-            Vector3 next = Vector3.MoveTowards(transform.position, _targetPosition.Value, _speed * Time.deltaTime);
+            var next = Vector3.MoveTowards(transform.position, _targetPosition.Value, _speed * Time.deltaTime);
             transform.position = next;
             
             _distanceToTarget = Vector3.Distance(transform.position, _targetPosition.Value);

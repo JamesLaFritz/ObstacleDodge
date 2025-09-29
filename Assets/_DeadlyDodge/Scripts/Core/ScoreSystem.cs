@@ -1,86 +1,98 @@
 #region Header
 // ScoreSystem.cs
 // Author: James LaFritz
-// Description: Tracks survival time and computes MVP score.
+// Description: Tracks hits and computes final score from remaining time + no-hit bonus.
 #endregion
 
+using System;
 using UnityEngine;
 
 namespace DeadlyDodge.Core
 {
     /// <summary>
-    /// Computes score from survival time and exposes the best score.
+    /// MVP scoring: base points equal to remaining time (ceil),
+    /// with an optional bonus if the run had zero obstacle hits.
     /// </summary>
     public sealed class ScoreSystem : MonoBehaviour
     {
         #region Fields
 
         /// <summary>
-        /// Accumulated elapsed time for the current run.
+        /// Bonus points awarded if the player completes the level without any hits.
         /// </summary>
-        private float _elapsed = 0f;
+        [SerializeField, Min(0)] private int _noHitBonusPoints = 250;
 
         /// <summary>
-        /// Current run's integer score.
+        /// How many times the player has hit an obstacle this run.
         /// </summary>
-        private int _currentScore = 0;
+        private int _hitCount;
 
         /// <summary>
-        /// Highest score achieved in this session.
+        /// Cached final score for summary screens.
         /// </summary>
-        private int _bestScore = 0;
+        private int _finalScore;
+
+        /// <summary>
+        /// Highest score achieved in this session (simple in-memory).
+        /// </summary>
+        private int _bestScore;
+        
+        /// <summary>
+        /// Fired whenever the hit count increments; passes the updated value.
+        /// </summary>
+        public event Action<int> HitCountChanged;
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets the current run's score.
-        /// </summary>
-        public int CurrentScore => _currentScore;
+        /// <summary>Total hits this run.</summary>
+        public int HitCount => _hitCount;
 
-        /// <summary>
-        /// Gets the highest score achieved this session.
-        /// </summary>
+        /// <summary>Final computed score for this run.</summary>
+        public int FinalScore => _finalScore;
+
+        /// <summary>Best score across runs this session.</summary>
         public int BestScore => _bestScore;
-
-        #endregion
-
-        #region Unity Messages
-
-        /// <summary>
-        /// Updates elapsed time and recomputes the score each frame.
-        /// </summary>
-        private void Update()
-        {
-            // TODO:
-            // _elapsed += Time.deltaTime;
-            // _currentScore = Mathf.RoundToInt(_elapsed * 10f); // Simple MVP formula.
-        }
 
         #endregion
 
         #region Public API
 
         /// <summary>
-        /// Resets score and elapsed time for a new run.
+        /// Clears run stats (hits, final score). Call when a new run starts.
         /// </summary>
-        public void ResetAll()
+        public void ResetRun()
         {
-            // TODO:
-            // _elapsed = 0f;
-            // _currentScore = 0;
+            _hitCount = 0;
+            _finalScore = 0;
         }
 
         /// <summary>
-        /// Commits the current score to the best score if it is higher.
+        /// Registers a player obstacle hit.
         /// </summary>
-        public void CommitBest()
+        public void RegisterHit()
         {
-            // TODO:
-            // if (_currentScore > _bestScore) _bestScore = _currentScore;
+            _hitCount++;
+            HitCountChanged?.Invoke(_hitCount);
+            Debug.Log($"Hit count: {_hitCount}");
+        }
+
+        /// <summary>
+        /// Computes the final score based on remaining time and bonuses.
+        /// </summary>
+        /// <param name="remainingTimeSeconds">Time left when finishing or expiring.</param>
+        public void ComputeFinalScore(float remainingTimeSeconds)
+        {
+            var baseScore = Mathf.CeilToInt(Mathf.Max(0f, remainingTimeSeconds));
+            var bonus = (_hitCount == 0) ? _noHitBonusPoints : 0;
+            _finalScore = baseScore + bonus;
+
+            if (_finalScore > _bestScore)
+                _bestScore = _finalScore;
         }
 
         #endregion
     }
+    
 }
